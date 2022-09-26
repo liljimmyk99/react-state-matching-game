@@ -18,15 +18,24 @@ class App extends Component{
     }
   }
 
-  handleTileClicked(id, color){
+  handleTileClicked = (id, color) => {
     this.setState((state) => {
       const tiles = state.tiles;
-      const toBeCleared = state.toBeCleared;
-      const selectedTileIndex = indexOfSelected(id, color);
-      const previousTileIndex = state.previousTileIndex;
-      if(previousTileIndex === null){
-        const previousTile = state.tiles[previousTileIndex];
-        const selectedTile = state.tiles[selectedTileIndex];
+      let toBeCleared = state.toBeCleared;
+      const selectedTileIndex = indexOfSelected(tiles, id, color);
+      let previousTileIndex = state.previousTileIndex;
+      
+      if(toBeCleared !== null){
+        tiles[toBeCleared[0]].selected = false
+        tiles[toBeCleared[1]].selected = false
+        toBeCleared = null
+      }
+
+      tiles[selectedTileIndex].selected = true;
+
+      if(previousTileIndex !== null){
+        const previousTile = tiles[previousTileIndex];
+        const selectedTile = tiles[selectedTileIndex];
         
         if ((previousTile.id !== selectedTile.id) && previousTile.color === color) {
           selectedTile.matched = true;
@@ -37,14 +46,10 @@ class App extends Component{
           toBeCleared = [previousTileIndex, selectedTileIndex]
           previousTileIndex = null;
         }
-
-        tiles[selectedTileIndex].selected = true;
       } else{
         previousTileIndex = selectedTileIndex
       }
-
-     
-      return {tiles: tiles, toBeCleared: toBeCleared, previousTileIndex: previousTileIndex}
+      return {toBeCleared, tiles, previousTileIndex}
     })
   }
 
@@ -54,7 +59,7 @@ class App extends Component{
         playing: true,
         previousTileIndex: null,
         toBeCleared: null,
-        tiles: createTiles(state.numTiles, this.handleTileClicked())
+        tiles: createTiles(state.numTiles, this.handleTileClicked)
       }
     })
   }
@@ -65,7 +70,7 @@ class App extends Component{
       <header className="App-header">
         Turbo-Matcher
       </header>
-        <OptionsPanel playing={this.state.playing} numTiles={this.state.numTiles} startGame={this.startGame.bind(this)}/>
+        <OptionsPanel playing={this.state.playing} numTiles={this.state.numTiles} startGame={this.startGame}/>
         <Board numTiles={this.state.numTiles} tiles={this.state.tiles}/>
     </div>
   );
