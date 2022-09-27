@@ -4,9 +4,11 @@ import "./Button.css";
 
 const Button = (props) => (
   <GameContext.Consumer>
-    {(playing, startGame) => {
+    {
+        ({playing, startGame}) => {
       <button onClick={startGame}>{playing ? "reset" : "start"}</button>;
-    }}
+        }
+    }
   </GameContext.Consumer>
 );
 
