@@ -6,7 +6,7 @@ import useHover from "../../hooks";
 const TileSelector = (props) => {
   const [ref, hovered] = useHover();
 
-  <GameContext.Provider>
+  <GameContext.Consumer>
       {(numTiles, handleNumTileChange) => {
   const dropdown = hovered ? (
     <div className="tileSelectorContent">
@@ -32,7 +32,7 @@ const TileSelector = (props) => {
     </div>
   );
 }}
-  </GameContext.Provider>
+  </GameContext.Consumer>
 
 };
 export default TileSelector;
